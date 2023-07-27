@@ -10,6 +10,7 @@
   },
   "scripts": {
     "start": "node --max-http-header-size=65536 index.js",
+    "dev": "nodemon index.js",
     "format": "prettier --write \"**/*.js\"",
     "test": "PORT=3401 NODE_ENV=test mocha --exit --recursive test/ci/",
     "test:watch": "PORT=2998 NODE_ENV=test chokidar '**/*.js' --initial --ignore node_modules -c 'mocha --exit --recursive test/'"
@@ -60,6 +61,7 @@
     "image-size": "^0.8.3",
     "jimp": "^0.13.0",
     "mocha": "^6.2.3",
+    "nodemon": "^3.0.1",
     "pixelmatch": "^5.1.0",
     "prettier": "^1.18.2",
     "qrcode-reader": "^1.0.4",
