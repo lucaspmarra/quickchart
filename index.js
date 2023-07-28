@@ -327,6 +327,7 @@ function handleGChart(req, res) {
 }
 
 app.get('/chart', (req, res) => {
+  console.log('GET /chart query:', req.query);
   if (req.query.cht) {
     // This is a Google Image Charts-compatible request.
     handleGChart(req, res);
@@ -345,7 +346,7 @@ app.get('/chart', (req, res) => {
     encoding: req.query.encoding || 'url',
     format: outputFormat,
   };
-
+  console.log('Rendering chart with options:', opts);
   if (outputFormat === 'pdf') {
     renderChartToPdf(req, res, opts);
   } else if (outputFormat === 'svg') {
@@ -361,6 +362,7 @@ app.get('/chart', (req, res) => {
 });
 
 app.post('/chart', (req, res) => {
+  console.log('POST /chart body:', req.body);
   const outputFormat = (req.body.f || req.body.format || 'png').toLowerCase();
   const opts = {
     chart: req.body.c || req.body.chart,
@@ -374,6 +376,7 @@ app.post('/chart', (req, res) => {
     format: outputFormat,
   };
 
+  console.log('Rendering chart with options:', opts);
   if (outputFormat === 'pdf') {
     renderChartToPdf(req, res, opts);
   } else if (outputFormat === 'svg') {
