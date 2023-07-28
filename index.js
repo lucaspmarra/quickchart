@@ -192,7 +192,7 @@ function doChartjsRender(req, res, opts) {
 
   let untrustedInput = opts.chart;
   if (opts.encoding === 'base64') {
-    // TODO(ian): Move this decoding up the call stack.
+    // (ian) TODO: Move this decoding up the call stack.
     try {
       untrustedInput = Buffer.from(opts.chart, 'base64').toString('utf8');
     } catch (err) {
