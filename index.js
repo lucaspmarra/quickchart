@@ -217,6 +217,7 @@ function doChartjsRender(req, res, opts) {
       logger.warn('Chart error', err);
       opts.failFn(res, err);
     });
+  // console.log('opts.backgroundImageURL - index.js: ', opts.backgroundImageURL)
 }
 
 async function handleGraphviz(req, res, graphVizDef, opts) {
@@ -312,7 +313,7 @@ function handleGChart(req, res) {
     '2.9.4' /* version */,
     undefined /* format */,
     converted.chart,
-    converted.backgroundImageURL, // Pass backgroundImageURL to renderChartJs
+    converted.backgroundImageURL,
   ).then(buf => {
     res.writeHead(200, {
       'Content-Type': 'image/png',
@@ -327,7 +328,7 @@ function handleGChart(req, res) {
 }
 
 app.get('/chart', (req, res) => {
-  console.log('GET /chart query:', req.query);
+  // console.log('GET /chart query:', req.query);
   if (req.query.cht) {
     // This is a Google Image Charts-compatible request.
     handleGChart(req, res);
@@ -346,7 +347,7 @@ app.get('/chart', (req, res) => {
     encoding: req.query.encoding || 'url',
     format: outputFormat,
   };
-  console.log('Rendering chart with options:', opts);
+  // console.log('Rendering chart with options:', opts);
   if (outputFormat === 'pdf') {
     renderChartToPdf(req, res, opts);
   } else if (outputFormat === 'svg') {
@@ -362,7 +363,13 @@ app.get('/chart', (req, res) => {
 });
 
 app.post('/chart', (req, res) => {
-  console.log('POST /chart body:', req.body);
+  //console.log('POST /chart body:', req.body);
+  //console.log('Chart type:', req.body.chart.type);
+  //console.log('Chart labels:', req.body.chart.data.labels);
+  //console.log('Chart datasets:', req.body.chart.data.datasets);
+  console.log('Chart options:', req.body.chart.options);
+  //console.log('Output format:', req.body.format);
+
   const outputFormat = (req.body.f || req.body.format || 'png').toLowerCase();
   const opts = {
     chart: req.body.c || req.body.chart,
@@ -376,7 +383,8 @@ app.post('/chart', (req, res) => {
     format: outputFormat,
   };
 
-  console.log('Rendering chart with options:', opts);
+  console.log('Rendering chart with options: ');
+  console.log(JSON.stringify(opts));
   if (outputFormat === 'pdf') {
     renderChartToPdf(req, res, opts);
   } else if (outputFormat === 'svg') {
@@ -466,10 +474,10 @@ const server = app.listen(port);
 
 const timeout = parseInt(process.env.REQUEST_TIMEOUT_MS, 10) || 5000;
 server.setTimeout(timeout);
-logger.info(`Setting request timeout: ${timeout} ms`);
+// logger.info(`Setting request timeout: ${timeout} ms`);
 
-logger.info(`NODE_ENV: ${process.env.NODE_ENV}`);
-logger.info(`Listening on port ${port}`);
+// logger.info(`NODE_ENV: ${process.env.NODE_ENV}`);
+// logger.info(`Listening on port ${port}`);
 
 if (!isDev) {
   const gracefulShutdown = function gracefulShutdown() {
